@@ -183,3 +183,106 @@ body {
     0% { transform: translateY(0); }
     100% { transform: translateY(2px); }
 }
+
+.buttons {
+    display: block;
+}
+
+.top-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.main-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.btn-digit,
+button[data-action],
+button[data-action="clear"],
+button[data-action="allClear"] {
+    padding: 18px;
+    font-size: 1.4em;
+    font-family: inherit;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: var(--btn-digit-bg);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 8px var(--shadow-dark);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Портреты персонажей на кнопках 1-9 */
+button[data-digit="1"] { /* Eleven */
+    background-image: url('https://i.pinimg.com/1200x/6e/bc/ec/6ebcece47d1d2f5331347252576cda37.jpg');
+}
+button[data-digit="2"] { /* Will Byers */
+    background-image: url('https://i.pinimg.com/1200x/47/dc/00/47dc00688336772c1433c5444b87a420.jpg');
+}
+button[data-digit="3"] { /* Mike Wheeler */
+    background-image: url('https://i.pinimg.com/736x/cf/ea/8c/cfea8ce5da23b7ebf0848a1b1a141f4d.jpg');
+}
+button[data-digit="4"] { /* Dustin Henderson */
+    background-image: url('https://i.pinimg.com/1200x/9b/41/b5/9b41b52e3093365656a6e70d7b208949.jpg');
+}
+button[data-digit="5"] { /* Max Mayfield */
+    background-image: url('https://i.pinimg.com/736x/9f/55/7c/9f557ca630eb6cdc6fb14309671e31df.jpg');
+}
+button[data-digit="6"] { /* Lucas Sinclair */
+    background-image: url('https://i.pinimg.com/736x/2d/16/10/2d1610248e224f760e953184f23bdb5d.jpg');
+}
+button[data-digit="7"] { /* Vecna */
+    background-image: url('https://i.pinimg.com/736x/4d/bc/82/4dbc82bca4e4b0158487c8c0e9c46a28.jpg');
+}
+button[data-digit="8"] { /* Steve Harrington */
+    background-image: url('https://i.pinimg.com/736x/c9/01/3b/c9013b86cfeaefc13252ffccd75bf347.jpg');
+}
+button[data-digit="9"] { /* Nancy Wheeler */
+    background-image: url('https://i.pinimg.com/1200x/b7/87/fa/b787fae75a4d7dd9d8f81d8ea16f9a33.jpg');
+}
+button[data-digit="0"] { /* Nancy Wheeler */
+    background-image: url('https://i.pinimg.com/1200x/a8/9d/ad/a89dad1236eba4b68305e91e0b3eab76.jpg');
+}
+button[data-digit="."] { /* Nancy Wheeler */
+    background-image: url('https://i.pinimg.com/736x/53/6c/63/536c6323d439596e766f055498e775e4.jpg');
+}
+
+/* Общие стили для портретов */
+button[data-digit] {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0 5px var(--neon-glow), 1px 1px 2px rgba(0, 0, 0, 0.8);
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+button[data-digit]::after,
+button[data-action]::after {
+    content: '🕷';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.8em;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+button[data-digit]:hover,
+button[data-action]:hover {
+    background: var(--btn-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px var(--glow-color), 0 0 15px var(--glow-color);
+    color: var(--neon-glow);
+    text-shadow: 0 0 5px var(--neon-glow);
+    filter: brightness(1.1);
+}
