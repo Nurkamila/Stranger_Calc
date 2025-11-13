@@ -128,7 +128,7 @@ class Calculator {
 
     evaluate() {
         if (this.previousOperand === null || this.operation === null) return;
-        if (this.newOperation) return; // предотвращает 9 - → 9 - 0
+        if (this.newOperation) return; 
 
         const prev = this.previousOperand;
         const current = parseFloat(this.current);
@@ -195,7 +195,6 @@ class Calculator {
     }
 
     clear() {
-        // Теперь полный сброс выражения до "0", но история остаётся
         this.current = '0';
         this.previousOperand = null;
         this.operation = null;
@@ -221,20 +220,16 @@ class Calculator {
             return;
         }
 
-        // Если новый ввод ожидается (после операции) или current пустой/нулевой — стираем оператор
         if (this.newOperation || this.current === '0') {
             if (this.operation !== null && this.previousOperand !== null) {
-                // Возвращаемся к предыдущему операнду
                 this.current = this.previousOperand.toString();
                 this.previousOperand = null;
                 this.operation = null;
                 this.newOperation = false;
             } else {
-                // Если ничего нет — просто "0"
                 this.current = '0';
             }
         } else {
-            // Обычное стирание символа из current
             if (this.current.length <= 1) {
                 this.current = '0';
             } else {
