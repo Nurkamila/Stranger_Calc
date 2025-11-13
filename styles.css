@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Orbitron:wght@400;700&family=Courier+New&display=swap');
+
+:root {
+    --bg-gradient: linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%);
+    --bg-image:
+            radial-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 0),
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 0, 0, 0.05) 2px, rgba(139, 0, 0, 0.05) 4px);
+    --bg-size: 20px 20px, 100% 4px;
+    --calc-bg: linear-gradient(145deg, #1c1c1c 0%, #0a0a0a 100%),
+    url('https://images.wallpaperflare.com/wallpapers/eleven-stranger-things-portrait-group-of-people-looking-at-camera-ccwpz-3840x1080.jpg') center/cover no-repeat;
+    --calc-blend: multiply;
+    --text-primary: #ed2b12;
+    --border-primary: #ed2b12;
+    --btn-digit-bg: linear-gradient(145deg, #4a4a4a 0%, #333 100%);
+    --btn-op-bg: linear-gradient(145deg, #8b0000 0%, #660000 100%);
+    --btn-clear-bg: linear-gradient(145deg, #ed2b12 0%, #cc0000 100%);
+    --btn-hover: linear-gradient(145deg, #666 0%, #555 100%);
+    --btn-op-hover: linear-gradient(145deg, #a50000 0%, #880000 100%);
+    --glow-color: rgba(237, 43, 18, 0.4);
+    --neon-glow: #ed2b12;
+    --shadow-dark: rgba(0, 0, 0, 0.9);
+    --history-bg: rgba(0, 0, 0, 0.8);
+    --history-border: rgba(237, 43, 18, 0.2);
+    --display-bg: #000;
+}
+
+.light {
+    --bg-gradient: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 50%, #b8dcff 100%);
+    --bg-image:
+            radial-gradient(rgba(0, 123, 255, 0.1) 1px, transparent 0),
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 123, 255, 0.05) 2px, rgba(0, 123, 255, 0.05) 4px);
+    --bg-size: 20px 20px, 100% 4px;
+    --calc-bg: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%),
+    url('https://images.wallpaperflare.com/wallpapers/eleven-stranger-things-portrait-group-of-people-looking-at-camera-ccwpz-3840x1080.jpg') center/cover no-repeat;
+    --calc-blend: screen;
+    --text-primary: #1e3a8a;
+    --border-primary: #3b82f6;
+    --btn-digit-bg: linear-gradient(145deg, #e5e7eb 0%, #d1d5db 100%);
+    --btn-op-bg: linear-gradient(145deg, #60a5fa 0%, #3b82f6 100%);
+    --btn-clear-bg: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+    --btn-hover: linear-gradient(145deg, #f3f4f6 0%, #e5e7eb 100%);
+    --btn-op-hover: linear-gradient(145deg, #7dd3fc 0%, #60a5fa 100%);
+    --glow-color: rgba(59, 130, 246, 0.4);
+    --neon-glow: #3b82f6;
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+    --history-bg: rgba(255, 255, 255, 0.9);
+    --history-border: rgba(59, 130, 246, 0.2);
+    --display-bg: #f8f9fa;
+}
+
+body {
+    font-family: 'Orbitron', 'Courier New', monospace;
+    background: var(--bg-gradient);
+    background-image: var(--bg-image);
+    background-size: var(--bg-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh + 20px);
+    margin: 0;
+    padding: 20px;
+    padding-top: 40px;
+    box-sizing: border-box;
+    animation: flicker 0.1s infinite alternate;
+    color: var(--text-primary);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+@keyframes flicker {
+    0% { opacity: 1; }
+    100% { opacity: 0.98; }
+}
+
+.calculator {
+    background: var(--calc-bg);
+    background-blend-mode: var(--calc-blend);
+    border-radius: 10px;
+    box-shadow:
+            0 8px 16px var(--shadow-dark),
+            0 0 30px var(--glow-color),
+            inset 0 2px 4px rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    max-width: 380px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--border-primary);
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calculator::before {
+    content: '🔦 STRANGER CALC 🔦';
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Abril Fatface', serif;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: -0.6px;
+    white-space: nowrap;
+    color: var(--text-primary);
+    text-shadow:
+            -0.05rem -0.05rem 1px var(--neon-glow),
+            0.05rem -0.05rem 1px var(--neon-glow),
+            -0.05rem 0.05rem 1px var(--neon-glow),
+            0.05rem 0.05rem 1px var(--neon-glow),
+            0 0 15px #630100,
+            0 0 20px #450100;
+    padding: 6px 20px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px var(--glow-color);
+    z-index: 1;
+    animation: neonGlow 2s infinite alternate;
+}
+
+@keyframes neonGlow {
+    0% {
+        text-shadow: -0.05rem -0.05rem 1px var(--neon-glow), 0.05rem -0.05rem 1px var(--neon-glow), -0.05rem 0.05rem 1px var(--neon-glow), 0.05rem 0.05rem 1px var(--neon-glow), 0 0 15px #630100, 0 0 20px #450100;
+        box-shadow: 0 0 10px var(--glow-color);
+    }
+    100% {
+        text-shadow: -0.05rem -0.05rem 2px var(--neon-glow), 0.05rem -0.05rem 2px var(--neon-glow), -0.05rem 0.05rem 2px var(--neon-glow), 0.05rem 0.05rem 2px var(--neon-glow), 0 0 25px var(--neon-glow), 0 0 30px #ff0000;
+        box-shadow: 0 0 20px var(--glow-color);
+    }
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--btn-clear-bg);
+    color: #fff;
+    border: 1px solid var(--border-primary);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    cursor: pointer;
+    z-index: 1;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px var(--shadow-dark);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px var(--glow-color);
+}
+
+.display {
+    background: var(--display-bg);
+    color: var(--text-primary);
+    font-size: 2.5em;
+    font-family: 'Courier New', monospace;
+    padding: 20px;
+    text-align: right;
+    min-height: 60px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-shadow: 0 0 10px rgba(237, 43, 18, 0.8);
+    border: 1px solid var(--border-primary);
+    position: relative;
+    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.display::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 2px, var(--border-primary) 2px, var(--border-primary) 4px 0.03);
+    pointer-events: none;
+    animation: scanline 0.05s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(2px); }
+}
