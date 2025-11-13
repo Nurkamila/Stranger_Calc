@@ -97,11 +97,29 @@ class Calculator {
 
     handleAction(action) {
         switch (action) {
+            case 'clear':
+                this.clear();
+                break;
+            case 'allClear':
+                this.allClear();
+                break;
+            case 'backspace':
+                this.backspace();
+                break;
             case 'evaluate':
                 this.evaluate();
                 break;
-            // ...
-
+            case '%':
+                this.percent();
+                break;
+            case '-':
+                if (this.operation === null && (this.current === '0' || this.current === '')) {
+                    this.current = '-';
+                } else {
+                    this.chooseOperation(action);
+                }
+                this.updateDisplay();
+                break;
             default:
                 this.chooseOperation(action);
                 break;
@@ -110,7 +128,7 @@ class Calculator {
 
     evaluate() {
         if (this.previousOperand === null || this.operation === null) return;
-        if (this.newOperation) return;
+        if (this.newOperation) return; // предотвращает 9 - → 9 - 0
 
         const prev = this.previousOperand;
         const current = parseFloat(this.current);
@@ -127,6 +145,11 @@ class Calculator {
                 result = prev * current;
                 break;
             case '/':
+                if (current === 0) {
+                    this.current = 'Error: Cannot divide by zero';
+                    this.updateDisplay();
+                    return;
+                }
                 result = prev / current;
                 break;
             default:
@@ -162,6 +185,66 @@ class Calculator {
     renderHistory() {
         const html = this.history.map((expr) => `<li>${expr}</li>`).join('');
         this.historyList.innerHTML = html;
+    }
+
+    percent() {
+        let value = parseFloat(this.current);
+        if (Number.isNaN(value)) return;
+        this.current = (value / 100).toString();
+        this.updateDisplay();
+    }
+
+    clear() {
+        // Теперь полный сброс выражения до "0", но история остаётся
+        this.current = '0';
+        this.previousOperand = null;
+        this.operation = null;
+        this.newOperation = false;
+        this.updateDisplay();
+    }
+
+    allClear() {
+        this.current = '0';
+        this.previousOperand = null;
+        this.operation = null;
+        this.newOperation = false;
+        this.history = [];
+        localStorage.removeItem('calcHistory');
+        this.renderHistory();
+        this.updateDisplay();
+    }
+
+    backspace() {
+        if (this.current === 'Error') {
+            this.current = '0';
+            this.updateDisplay();
+            return;
+        }
+
+        // Если новый ввод ожидается (после операции) или current пустой/нулевой — стираем оператор
+        if (this.newOperation || this.current === '0') {
+            if (this.operation !== null && this.previousOperand !== null) {
+                // Возвращаемся к предыдущему операнду
+                this.current = this.previousOperand.toString();
+                this.previousOperand = null;
+                this.operation = null;
+                this.newOperation = false;
+            } else {
+                // Если ничего нет — просто "0"
+                this.current = '0';
+            }
+        } else {
+            // Обычное стирание символа из current
+            if (this.current.length <= 1) {
+                this.current = '0';
+            } else {
+                this.current = this.current.slice(0, -1);
+            }
+            if (this.current === '-') {
+                this.current = '0';
+            }
+        }
+        this.updateDisplay();
     }
 
 }
