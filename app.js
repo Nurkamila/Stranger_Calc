@@ -38,3 +38,29 @@ class Calculator {
     updateDisplay() {
         this.display.textContent = this.getDisplayValue();
     }
+
+    inputDigit(digit) {
+        if (this.newOperation) {
+            this.current = digit === '.' ? '0.' : digit;
+            this.newOperation = false;
+        } else {
+            if (digit === '.' && this.current.includes('.')) return;
+            if (this.current === '0' && digit !== '.') {
+                this.current = digit;
+            } else {
+                this.current += digit;
+            }
+        }
+        this.updateDisplay();
+    }
+
+    bindEvents() {
+        this.buttons.addEventListener('click', (event) => {
+            const { target } = event;
+            if (target.matches('button[data-digit]')) {
+                this.inputDigit(target.dataset.digit);
+            }
+
+        });
+
+    }
