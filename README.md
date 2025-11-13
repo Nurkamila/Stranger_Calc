@@ -5,7 +5,7 @@
 
 A retro-futuristic calculator themed around *Stranger Things*, featuring neon glows, character portraits on buttons, dark/light themes, calculation history, and full keyboard support. Built with vanilla HTML, CSS, and JavaScript for accessibility and performance.
 
-Live Demo: [View on GitHub Pages](https://yourusername.github.io/stranger-calculator/)
+Live Demo: [https://nurkamila.github.io/Stranger_Calc/](https://nurkamila.github.io/Stranger_Calc/)
 
 ## Features
 - **Themed Design**: Dark mode with *Stranger Things* wallpaper, neon red glows, and flickering animations. Toggle to light mode with blue accents.
