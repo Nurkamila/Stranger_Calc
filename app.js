@@ -59,8 +59,33 @@ class Calculator {
             const { target } = event;
             if (target.matches('button[data-digit]')) {
                 this.inputDigit(target.dataset.digit);
+            } else if (target.matches('button[data-action]')) {
+                const action = target.dataset.action;
+                this.handleAction(action);
             }
 
         });
 
     }
+
+    chooseOperation(nextOperator) {
+        const inputValue = parseFloat(this.current);
+        if (Number.isNaN(inputValue)) return;
+
+        if (this.previousOperand !== null && this.operation !== null && !this.newOperation) {
+            this.evaluate(); 
+        }
+
+        this.operation = nextOperator;
+        this.previousOperand = parseFloat(this.current);
+        this.newOperation = true;
+        this.updateDisplay();
+    }
+
+    handleAction(action) {
+        
+        default:
+            this.chooseOperation(action);
+            break;
+    }
+
