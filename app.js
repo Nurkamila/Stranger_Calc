@@ -83,9 +83,54 @@ class Calculator {
     }
 
     handleAction(action) {
-        
-        default:
-            this.chooseOperation(action);
-            break;
+        switch (action) {
+            case 'evaluate':
+                this.evaluate();
+                break;
+            // ...
+
+            default:
+                this.chooseOperation(action);
+                break;
+        }
+    }
+
+    evaluate() {
+        if (this.previousOperand === null || this.operation === null) return;
+        if (this.newOperation) return;
+
+        const prev = this.previousOperand;
+        const current = parseFloat(this.current);
+        let result;
+
+        switch (this.operation) {
+            case '+':
+                result = prev + current;
+                break;
+            case '-':
+                result = prev - current;
+                break;
+            case '*':
+                result = prev * current;
+                break;
+            case '/':
+                result = prev / current;
+                break;
+            default:
+                return;
+        }
+
+        const expression = ${prev} ${this.operation} ${current} = ${result};
+        this.history.unshift(expression);
+        this.history = this.history.slice(0, 10);
+        localStorage.setItem('calcHistory', JSON.stringify(this.history));
+        this.renderHistory();
+
+        this.current = result.toString();
+        this.previousOperand = null;
+        this.operation = null;
+        this.newOperation = true;
+        this.updateDisplay();
+
     }
 
