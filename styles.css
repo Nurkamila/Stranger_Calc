@@ -286,3 +286,105 @@ button[data-action]:hover {
     text-shadow: 0 0 5px var(--neon-glow);
     filter: brightness(1.1);
 }
+
+button[data-digit]:active,
+button[data-action]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px var(--shadow-dark);
+    filter: brightness(0.9);
+}
+
+button[data-digit]::after { opacity: 0.3; }
+
+button[data-action] {
+    background: var(--btn-op-bg);
+    color: var(--neon-glow);
+    border-color: var(--border-primary);
+}
+
+button[data-action="clear"],
+button[data-action="allClear"] {
+    background: var(--btn-clear-bg);
+    color: #fff;
+    font-weight: bold;
+    border-color: var(--border-primary);
+}
+
+.history-section {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto; /* Scrollable "tape" view */
+    background: var(--history-bg);
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid var(--border-primary);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.history-section h2 {
+    color: var(--neon-glow);
+    text-align: center;
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    font-family: 'Abril Fatface', serif;
+    text-shadow: 0 0 10px var(--neon-glow);
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#history-list li {
+    padding: 8px;
+    border-bottom: 1px solid var(--history-border);
+    font-size: 0.9em;
+    font-family: 'Courier New', monospace;
+    background: rgba(237, 43, 18, 0.1);
+    border-radius: 3px;
+    margin-bottom: 5px;
+    position: relative;
+    color: #fff;
+    cursor: pointer; /* For replay */
+    transition: background 0.2s ease;
+}
+
+#history-list li:hover {
+    background: rgba(237, 43, 18, 0.2);
+    transform: translateX(5px);
+}
+
+#history-list li::before {
+    content: '👹 ';
+    font-size: 0.8em;
+}
+
+button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--glow-color),
+    0 0 0 6px rgba(255, 0, 0, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body { animation: none; }
+    .display::after { animation: none; }
+    .calculator::before { animation: none; }
+}
+
+@media (max-width: 450px) {
+    body {
+        padding: 10px;
+        padding-top: 30px;
+    }
+    .calculator { padding: 15px; max-width: 100%; }
+    .display { font-size: 2em; padding: 15px; }
+    .btn-digit, button[data-action] { padding: 15px; font-size: 1.2em; }
+    .top-row { gap: 8px; }
+    .main-buttons { gap: 8px; }
+    .calculator::before { font-size: 1em; padding: 5px 15px; }
+    button[data-digit] { background-size: contain; }
+    .calculator { background-size: cover; }
+}
