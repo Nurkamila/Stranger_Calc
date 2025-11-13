@@ -18,3 +18,23 @@ class Calculator {
         this.themeToggle = document.getElementById('themeToggle');
         this.updateDisplay();
     }
+
+        loadTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.body.className = savedTheme;
+        this.themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    getDisplayValue() {
+        if (this.operation !== null && this.previousOperand !== null) {
+            if (this.newOperation || this.current === '0') {
+                return `${this.previousOperand} ${this.operation}`;
+            }
+            return `${this.previousOperand} ${this.operation} ${this.current}`;
+        }
+        return this.current || '0';
+    }
+
+    updateDisplay() {
+        this.display.textContent = this.getDisplayValue();
+    }
