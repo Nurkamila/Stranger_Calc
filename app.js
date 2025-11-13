@@ -66,6 +66,19 @@ class Calculator {
 
         });
 
+        this.historyList.addEventListener('click', (event) => {
+            if (event.target.tagName === 'LI') {
+                this.replayExpression(event.target.textContent);
+            }
+        });
+
+        this.themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light');
+            const isLight = document.body.classList.contains('light');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            this.themeToggle.textContent = isLight ? '🌙' : '☀️';
+        });
+
     }
 
     chooseOperation(nextOperator) {
@@ -131,6 +144,24 @@ class Calculator {
         this.operation = null;
         this.newOperation = true;
         this.updateDisplay();
-
     }
 
+    replayExpression(fullExpr) {
+        const eqPos = fullExpr.indexOf('=');
+        if (eqPos === -1) return;
+        const inputExpr = fullExpr.substring(0, eqPos).trim();
+        const parts = inputExpr.split(/\s+/);
+        if (parts.length !== 3) return;
+        this.previousOperand = parseFloat(parts[0]);
+        this.operation = parts[1];
+        this.current = parts[2];
+        this.newOperation = false;
+        this.updateDisplay();
+    }
+
+    renderHistory() {
+        const html = this.history.map((expr) => `<li>${expr}</li>`).join('');
+        this.historyList.innerHTML = html;
+    }
+
+}
