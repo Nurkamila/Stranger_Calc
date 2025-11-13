@@ -19,39 +19,10 @@ class Calculator {
         this.updateDisplay();
     }
 
-        loadTheme() {
+    loadTheme() {
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.body.className = savedTheme;
         this.themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
-    }
-
-    getDisplayValue() {
-        if (this.operation !== null && this.previousOperand !== null) {
-            if (this.newOperation || this.current === '0') {
-                return `${this.previousOperand} ${this.operation}`;
-            }
-            return `${this.previousOperand} ${this.operation} ${this.current}`;
-        }
-        return this.current || '0';
-    }
-
-    updateDisplay() {
-        this.display.textContent = this.getDisplayValue();
-    }
-
-    inputDigit(digit) {
-        if (this.newOperation) {
-            this.current = digit === '.' ? '0.' : digit;
-            this.newOperation = false;
-        } else {
-            if (digit === '.' && this.current.includes('.')) return;
-            if (this.current === '0' && digit !== '.') {
-                this.current = digit;
-            } else {
-                this.current += digit;
-            }
-        }
-        this.updateDisplay();
     }
 
     bindEvents() {
@@ -63,7 +34,6 @@ class Calculator {
                 const action = target.dataset.action;
                 this.handleAction(action);
             }
-
         });
 
         this.historyList.addEventListener('click', (event) => {
@@ -79,20 +49,28 @@ class Calculator {
             this.themeToggle.textContent = isLight ? '🌙' : '☀️';
         });
 
-    }
-
-    chooseOperation(nextOperator) {
-        const inputValue = parseFloat(this.current);
-        if (Number.isNaN(inputValue)) return;
-
-        if (this.previousOperand !== null && this.operation !== null && !this.newOperation) {
-            this.evaluate(); 
-        }
-
-        this.operation = nextOperator;
-        this.previousOperand = parseFloat(this.current);
-        this.newOperation = true;
-        this.updateDisplay();
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            if ((key >= '0' && key <= '9') || key === '.') {
+                this.inputDigit(key);
+            } else if (['+', '-', '*', '/'].includes(key)) {
+                this.chooseOperation(key);
+            } else if (key === 'Enter' || key === '=') {
+                this.evaluate();
+            } else if (key === 'Backspace') {
+                this.backspace();
+            } else if (key.toLowerCase() === 'c') {
+                if (event.shiftKey) {
+                    this.allClear();
+                } else {
+                    this.clear();
+                }
+            } else if (key === 'Escape') {
+                this.allClear();
+            } else if (key === '%') {
+                this.handleAction('%');
+            }
+        });
     }
 
     handleAction(action) {
@@ -126,9 +104,54 @@ class Calculator {
         }
     }
 
+    // 🔹 теперь без "0" после оператора
+    getDisplayValue() {
+        if (this.operation !== null && this.previousOperand !== null) {
+            // если пользователь только выбрал оператор, но ещё не ввёл второе число
+            if (this.newOperation || this.current === '0') {
+                return `${this.previousOperand} ${this.operation}`;
+            }
+            return `${this.previousOperand} ${this.operation} ${this.current}`;
+        }
+        return this.current || '0';
+    }
+
+    updateDisplay() {
+        this.display.textContent = this.getDisplayValue();
+    }
+
+    inputDigit(digit) {
+        if (this.newOperation) {
+            this.current = digit === '.' ? '0.' : digit;
+            this.newOperation = false;
+        } else {
+            if (digit === '.' && this.current.includes('.')) return;
+            if (this.current === '0' && digit !== '.') {
+                this.current = digit;
+            } else {
+                this.current += digit;
+            }
+        }
+        this.updateDisplay();
+    }
+
+    chooseOperation(nextOperator) {
+        const inputValue = parseFloat(this.current);
+        if (Number.isNaN(inputValue)) return;
+
+        if (this.previousOperand !== null && this.operation !== null && !this.newOperation) {
+            this.evaluate(); // вычисляем цепочкой
+        }
+
+        this.operation = nextOperator;
+        this.previousOperand = parseFloat(this.current);
+        this.newOperation = true;
+        this.updateDisplay();
+    }
+
     evaluate() {
         if (this.previousOperand === null || this.operation === null) return;
-        if (this.newOperation) return; 
+        if (this.newOperation) return; // предотвращает 9 - → 9 - 0
 
         const prev = this.previousOperand;
         const current = parseFloat(this.current);
@@ -156,7 +179,7 @@ class Calculator {
                 return;
         }
 
-        const expression = ${prev} ${this.operation} ${current} = ${result};
+        const expression = `${prev} ${this.operation} ${current} = ${result}`;
         this.history.unshift(expression);
         this.history = this.history.slice(0, 10);
         localStorage.setItem('calcHistory', JSON.stringify(this.history));
@@ -169,24 +192,6 @@ class Calculator {
         this.updateDisplay();
     }
 
-    replayExpression(fullExpr) {
-        const eqPos = fullExpr.indexOf('=');
-        if (eqPos === -1) return;
-        const inputExpr = fullExpr.substring(0, eqPos).trim();
-        const parts = inputExpr.split(/\s+/);
-        if (parts.length !== 3) return;
-        this.previousOperand = parseFloat(parts[0]);
-        this.operation = parts[1];
-        this.current = parts[2];
-        this.newOperation = false;
-        this.updateDisplay();
-    }
-
-    renderHistory() {
-        const html = this.history.map((expr) => `<li>${expr}</li>`).join('');
-        this.historyList.innerHTML = html;
-    }
-
     percent() {
         let value = parseFloat(this.current);
         if (Number.isNaN(value)) return;
@@ -195,6 +200,7 @@ class Calculator {
     }
 
     clear() {
+        // Теперь полный сброс выражения до "0", но история остаётся
         this.current = '0';
         this.previousOperand = null;
         this.operation = null;
@@ -220,16 +226,20 @@ class Calculator {
             return;
         }
 
+        // Если новый ввод ожидается (после операции) или current пустой/нулевой — стираем оператор
         if (this.newOperation || this.current === '0') {
             if (this.operation !== null && this.previousOperand !== null) {
+                // Возвращаемся к предыдущему операнду
                 this.current = this.previousOperand.toString();
                 this.previousOperand = null;
                 this.operation = null;
                 this.newOperation = false;
             } else {
+                // Если ничего нет — просто "0"
                 this.current = '0';
             }
         } else {
+            // Обычное стирание символа из current
             if (this.current.length <= 1) {
                 this.current = '0';
             } else {
@@ -242,4 +252,32 @@ class Calculator {
         this.updateDisplay();
     }
 
+    replayExpression(fullExpr) {
+        const eqPos = fullExpr.indexOf('=');
+        if (eqPos === -1) return;
+        const inputExpr = fullExpr.substring(0, eqPos).trim();
+        const parts = inputExpr.split(/\s+/);
+        if (parts.length !== 3) return;
+        this.previousOperand = parseFloat(parts[0]);
+        this.operation = parts[1];
+        this.current = parts[2];
+        this.newOperation = false;
+        this.updateDisplay();
+    }
+
+    renderHistory() {
+        const html = this.history.map((expr) => `<li>${expr}</li>`).join('');
+        this.historyList.innerHTML = html;
+    }
+
+    toJSON() {
+        return {
+            current: this.current,
+            previousOperand: this.previousOperand,
+            operation: this.operation,
+            history: [...this.history]
+        };
+    }
 }
+
+document.addEventListener('DOMContentLoaded', () => new Calculator());

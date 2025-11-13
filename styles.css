@@ -1,5 +1,7 @@
+/* Импорт шрифта, похожего на ITC Benguiat (из логотипа Stranger Things) */
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Orbitron:wght@400;700&family=Courier+New&display=swap');
 
+/* CSS Variables for theming */
 :root {
     --bg-gradient: linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%);
     --bg-image:
@@ -268,7 +270,7 @@ button[data-digit] {
 
 button[data-digit]::after,
 button[data-action]::after {
-    content: '🕷';
+    content: '🕷️';
     position: absolute;
     top: 5px;
     right: 5px;
@@ -362,18 +364,21 @@ button[data-action="allClear"] {
     font-size: 0.8em;
 }
 
+/* Accessibility: Фокус с красным неоновым свечением */
 button:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px var(--glow-color),
     0 0 0 6px rgba(255, 0, 0, 0.3);
 }
 
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
     body { animation: none; }
     .display::after { animation: none; }
     .calculator::before { animation: none; }
 }
 
+/* Responsivity */
 @media (max-width: 450px) {
     body {
         padding: 10px;
